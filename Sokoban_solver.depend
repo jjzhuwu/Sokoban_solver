@@ -1,0 +1,32 @@
+# depslib dependency file v1.0
+1575430977 source:c:\users\junji\onedrive\sokoban_solver\csvreader.cpp
+	"CSVReader.h"
+
+1575428837 c:\users\junji\onedrive\sokoban_solver\csvreader.h
+	<iostream>
+	<fstream>
+	<vector>
+	<iterator>
+	<string>
+
+1575431384 source:c:\users\junji\onedrive\sokoban_solver\main.cpp
+	<iostream>
+	<vector>
+	<cmath>
+	"Solution.h"
+	"CSVReader.h"
+	<queue>
+
+1575505128 c:\users\junji\onedrive\sokoban_solver\solution.h
+	<iostream>
+	<sstream>
+	<vector>
+	<map>
+	<queue>
+	<utility>
+	<assert.h>
+	<string>
+
+1575511822 source:c:\users\junji\onedrive\sokoban_solver\solution.cpp
+	"Solution.h"
+
