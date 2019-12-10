@@ -43,7 +43,19 @@ Solution::Solution(vector<vector<string> >& agrid) {
 
     assert(goals.size() == num_boxes);
 
-    //identity positions that boxes can not be pushed to
+    prune_board(s);
+
+    vector<char> t;
+
+    s += player_loc_to_string(player);
+    hist[s] = t;
+
+    states.push(s);
+}
+
+void Solution::prune_board(string &s){
+
+  //identity positions that boxes can not be pushed to
     for (int i = 0; i < s.size(); i++){
         if ((s[i] == '.') && !goals_find(i)){
             if ((((i >= m)&&(s[i-m] == 'W'))||((i < (n-1)*m)&&(s[i+m] == 'W')))
@@ -53,14 +65,73 @@ Solution::Solution(vector<vector<string> >& agrid) {
         }
     }
 
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < m; j++){
+            if (s[m*i+j] == 'I'){
+                //find I to the right
+                bool I_found = false;
+                int k = j+1;
+                while (k < m){
+                    if (s[m*i+k] == 'I'){
+                        I_found = true;
+                        break;
+                    }
+                    k++;
+                }
 
+                if (I_found){
+                    bool wall_up_down = true;
+                    bool space_middle = true;
 
-    vector<char> t;
+                    for (int l = j+1; l < k; l++){
+                        wall_up_down = wall_up_down && (((i > 0) && (s[m*(i-1)+l] == 'W')) || ((i < (n-1)) && (s[m*(i+1)+l] == 'W')));
+                        space_middle = space_middle && (s[m*i+l] == '.') && (!goals_find(m*i+l));
+                    }
 
-    s += player_loc_to_string(player);
-    hist[s] = t;
+                    if (wall_up_down && space_middle){
+                        for (int l = j+1; l < k; l++){
+                            s[m*i+l] = 'J';
+                        }
+                    }
+                }
+                //find I below
 
-    states.push(s);
+                I_found = false;
+                k = i+1;
+                while (k < n){
+                    if (s[m*k+j] == 'I'){
+                        I_found = true;
+                        break;
+                    }
+                    k++;
+                }
+
+                if (I_found){
+                    bool wall_left_right = true;
+                    bool space_middle = true;
+
+                    for (int l = i+1; l < k; l++){
+                        wall_left_right = wall_left_right && (((j > 0) && (s[m*l+j-1] == 'W')) || ((j < (m-1)) && (s[m*l+j+1] == 'W')));
+                        space_middle = space_middle && (s[m*l+j] == '.') && (!goals_find(m*l+j));
+                    }
+
+                    if (wall_left_right && space_middle){
+                        for (int l = i+1; l < k; l++){
+                            s[m*l+j] = 'J';
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < m; j++){
+            if (s[i*m+j] == 'J'){
+                s[i*m+j] = 'I';
+            }
+        }
+    }
 }
 
 bool Solution::goals_find(int i){

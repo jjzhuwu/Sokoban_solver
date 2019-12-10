@@ -33,6 +33,9 @@ public:
     string player_loc_to_string(int p);
 
     //also print solution, uses first one in the ss queue
+
+    void prune_board(string & s);
+
     bool solution_found();
 
     void BFS();
